@@ -31,7 +31,7 @@ class JSONlint(Tool):
         """
         log.debug('Processing %s files with %s', files, self.name)
 
-        command = ['jsonlint']
+        command = ['jsonlint', '-c']
         command += files
 
         output = run_command(command, split=True, ignore_error=True)
@@ -40,10 +40,6 @@ class JSONlint(Tool):
             return False
 
         for line in output:
-            if (line[0] == ' ' or
-                    line.find(': has errors') >= 0 or
-                    line.find(': ok') >= 0):
-                continue
             filename, line, error = self._parse_line(line)
             self.problems.add(filename, line, error)
 
@@ -52,5 +48,6 @@ class JSONlint(Tool):
         jsonlint only generates results as stdout.
         Parse the output for real data.
         """
-        parts = line.split(':', 3)
-        return (parts[0], int(parts[1]), parts[3][1:-1])
+        filename, msg = line.split(': ', 1)
+        line_no, col, error = msg.lstrip('line ').split(', ', 2)
+        return filename, line_no, error
