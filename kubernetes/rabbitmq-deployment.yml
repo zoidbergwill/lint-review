@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: lint-review-rabbitmq
+  name: lint-review-rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: lint-review-rabbitmq
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: lint-review-rabbitmq
+    spec:
+      containers:
+      - image: rabbitmq:3-management-alpine
+        name: lint-review-rabbitmq
+        ports:
+        - containerPort: 5672
+        resources: {}
+status: {}

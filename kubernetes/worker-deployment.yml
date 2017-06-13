@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: lint-review-worker
+  name: lint-review-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: lint-review-worker
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: lint-review-worker
+    spec:
+      containers:
+      - args:
+        - celery
+        - -A
+        - lintreview.tasks
+        - worker
+        - -l
+        - info
+        env:
+        - name: C_FORCE_ROOT
+          value: "true"
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'celery inspect ping -A lintreview.tasks -d "celery@$HOSTNAME"'
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'celery inspect ping -A lintreview.tasks -d "celery@$HOSTNAME"'
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        image: markstory/lint-review
+        name: lint-review-worker
+        ports:
+        - containerPort: 5000
+        resources: {}
+status: {}

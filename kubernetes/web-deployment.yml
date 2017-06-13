@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: lint-review-web
+  name: lint-review-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: lint-review-web
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: lint-review-web
+    spec:
+      containers:
+      - args:
+        - gunicorn
+        - -c
+        - /code/settings.py
+        - lintreview.web:app
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 5000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 5000
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        env:
+        - name: LINTREVIEW_GUNICORN_BIND
+          value: 0.0.0.0:5000
+        - name: LINTREVIEW_GUNICORN_LOG_ACCESS
+          value: '-'
+        - name: LINTREVIEW_GUNICORN_LOG_ERROR
+          value: '-'
+        image: markstory/lint-review
+        name: lint-review-web
+        ports:
+        - containerPort: 5000
+        resources: {}
+status: {}
