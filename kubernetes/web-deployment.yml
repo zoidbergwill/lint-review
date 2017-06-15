@@ -44,6 +44,8 @@ spec:
           value: '-'
         - name: LINTREVIEW_GUNICORN_LOG_ERROR
           value: '-'
+        - name: LINTREVIEW_MQ_HOST
+          value: lint-review-rabbitmq
         image: markstory/lint-review
         name: lint-review-web
         ports:

@@ -28,6 +28,8 @@ spec:
         env:
         - name: C_FORCE_ROOT
           value: "true"
+        - name: LINTREVIEW_MQ_HOST
+          value: lint-review-rabbitmq
         livenessProbe:
           exec:
             command:

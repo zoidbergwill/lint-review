@@ -22,5 +22,8 @@ spec:
         name: lint-review-rabbitmq
         ports:
         - containerPort: 5672
+          name: rabbit
+        - containerPort: 15672
+          name: management
         resources: {}
 status: {}
