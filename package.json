@@ -5,6 +5,7 @@
   "dependencies": {
     "csslint": "0.10.x",
     "eslint": "4.x",
+    "eslint-config-google": "^0.9.1",
     "eslint-plugin-ember": "3.x",
     "jscs": "1.x",
     "jscs-ember-deprecations": "2.3.0",
